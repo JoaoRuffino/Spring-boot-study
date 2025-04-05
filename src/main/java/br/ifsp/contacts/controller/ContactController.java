@@ -36,12 +36,7 @@ public class ContactController {
     
     @PostMapping
     public ContactResponseDTO createContact(@Valid @RequestBody ContactParametersDTO dto) {
-    	
-    	
-    	
         Contact contact = contactRepository.save(dto.transformToObject());
-        
-        
         return ContactResponseDTO.transformInDTO(contact);
     }
 

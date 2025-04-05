@@ -21,9 +21,8 @@ public class Address {
 	
 	
 
-	public Address(Long id, String rua, String cidade, String estado, String cep, Contact contato) {
+	public Address(String rua, String cidade, String estado, String cep, Contact contato) {
 		super();
-		this.id = id;
 		this.rua = rua;
 		this.cidade = cidade;
 		this.estado = estado;

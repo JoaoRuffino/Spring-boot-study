@@ -8,13 +8,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ContactParametersDTO {
@@ -27,7 +23,6 @@ public class ContactParametersDTO {
     private String email;
 
     public Contact transformToObject() {
-    	System.out.println("NOME:" + this.nome);
     	return new Contact(nome, telefone, email);
     }
     
