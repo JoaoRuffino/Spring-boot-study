@@ -20,17 +20,16 @@ public class ContactController {
     private ContactRepository contactRepository;
 
     @GetMapping
-    public List<Contact> getAllContacts() {
-        return contactRepository.findAll();
+    public List<ContactResponseDTO> getAllContacts() {
+        return ContactResponseDTO.transformListDTO(contactRepository.findAll());
     }
 
 
     @GetMapping("/{nome}")
-    public List<Contact> getContactByName(@PathVariable String nome) {
+    public List<ContactResponseDTO> getContactByName(@PathVariable String nome) {
         
-        return contactRepository.findByNome(nome)
-                .map(List::of)
-                .orElseGet(List::of);
+        List<Contact> contacts = contactRepository.findByNome(nome).map(List::of).orElseGet(List::of);
+        return ContactResponseDTO.transformListDTO(contacts);
     }
 
     
@@ -41,14 +40,15 @@ public class ContactController {
     }
 
     @PutMapping("/{id}")
-    public Contact updateContact(@PathVariable Long id, @RequestBody Contact updatedContact) {
+    public ContactResponseDTO updateContact(@PathVariable Long id, @RequestBody Contact updatedContact) {
         Contact existingContact = contactRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Contato não encontrado: " + id));
 
         existingContact.setNome(updatedContact.getNome());
         existingContact.setTelefone(updatedContact.getTelefone());
         existingContact.setEmail(updatedContact.getEmail());
-        return contactRepository.save(existingContact);
+        Contact contactUpdated = contactRepository.save(existingContact);
+        return ContactResponseDTO.transformInDTO(contactUpdated);
     }
 
     @DeleteMapping("/{id}")
@@ -57,7 +57,7 @@ public class ContactController {
     }
     
     @PatchMapping("/{id}")
-    public Contact patchContact(@PathVariable Long id, @RequestBody Contact contactUpdates) {
+    public ContactResponseDTO patchContact(@PathVariable Long id, @RequestBody Contact contactUpdates) {
         Contact existingContact = contactRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Contato não encontrado: " + id));
         
@@ -70,6 +70,6 @@ public class ContactController {
         if (contactUpdates.getEmail() != null) {
             existingContact.setEmail(contactUpdates.getEmail());
         }
-        return contactRepository.save(existingContact);
-    }
+        Contact contactUpdated = contactRepository.save(existingContact);
+        return ContactResponseDTO.transformInDTO(contactUpdated);    }
 }

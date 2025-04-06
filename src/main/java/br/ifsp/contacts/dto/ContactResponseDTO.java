@@ -1,6 +1,9 @@
 package br.ifsp.contacts.dto;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.ifsp.contacts.model.Contact;
 import lombok.Getter;
 
@@ -16,6 +19,15 @@ public class ContactResponseDTO {
 
     public static ContactResponseDTO transformInDTO(Contact contact) {
     	return new ContactResponseDTO(contact.getNome(), contact.getTelefone());
+    }
+    
+    public static List<ContactResponseDTO> transformListDTO(List<Contact> contacts){
+    	List<ContactResponseDTO> dtoList = new ArrayList<>();
+    	
+    	for(Contact contact : contacts) {
+    		dtoList.add(ContactResponseDTO.transformInDTO(contact));
+    	}
+    	return dtoList;
     }
 
 
