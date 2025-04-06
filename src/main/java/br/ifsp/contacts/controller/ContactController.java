@@ -4,24 +4,39 @@ import br.ifsp.contacts.dto.ContactParametersDTO;
 import br.ifsp.contacts.dto.ContactResponseDTO;
 import br.ifsp.contacts.model.Contact;
 import br.ifsp.contacts.repository.ContactRepository;
+import br.ifsp.contacts.service.ContactsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+
 
 import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/api/contacts")
+@Tag(name = "Contact", description = "Controller for contacts")
 public class ContactController {
 
     @Autowired
     private ContactRepository contactRepository;
+    @Autowired
+    private ContactsService contactService;
 
     @GetMapping
-    public List<ContactResponseDTO> getAllContacts() {
-        return ContactResponseDTO.transformListDTO(contactRepository.findAll());
+    @Operation(summary = "Retorna lista de todos os usuários", description = "Método para retornar usuários")
+    @ApiResponse(responseCode = "200")
+    public ResponseEntity<Page<Contact>> getAllContacts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<Contact> contactPage = contactService.findAllPaginated(page, size);
+        return ResponseEntity.ok(contactPage);
     }
 
 
